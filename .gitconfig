@@ -1,30 +1,25 @@
 [user]
-	name = Michal Tehnik
-	email = michal.tehnik@mictech.cz
+	name = Daniel Kolman
+	email = daniel@kolman.cz
 [core]
-	excludesfile = ~/DropBox/Config/dotfiles/.gitignore_global
-	#editor = subl -n -w
-	editor = atom
-[merge]
-    tool = p4merge
-    keepBackup = false
-[mergetool "p4merge"]
-    cmd = p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
-    keepTemporaries = false
-    trustExitCode = false
-    keepBackup = false
-[diff]
-    external = p4diff
-
-[color]
-	ui = true
-[push]
-	default = tracking
+	excludesfile = /Users/dkolman/dotfiles/.gitignore_global
+	editor = vim
 [branch]
 	autosetuprebase = always
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+[push]
+	default = tracking
+[merge]
+	keepBackup = false;
+	tool = fugitive
+[mergetool "fugitive"]
+	cmd = mvim -f -c \"Gdiff\" \"$MERGED\"
+[mergetool]
+	prompt = false
+[diff]
+	tool = mvimdiff
+[difftool]
+	prompt = false
+[difftool "mvimdiff"]
+	cmd = mvim -f -d \"$LOCAL\" \"$REMOTE\"
 	path =
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+
