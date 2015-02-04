@@ -9,17 +9,17 @@ fi
 brew update
 
 # Install GNU core utilities (those that come with OS X are outdated)
-brew install coreutils
+#brew install coreutils
 
 # Install GNU `find`, `locate`, `updatedb`, and `xargs`, g-prefixed
-brew install findutils
+# brew install findutils
 
 # Install Bash 4
 brew install bash
 
 # Install more recent versions of some OS X tools
-brew tap homebrew/dupes
-brew install homebrew/dupes/grep
+#brew tap homebrew/dupes
+#brew install homebrew/dupes/grep
 
 binaries=(
   rename
@@ -27,10 +27,13 @@ binaries=(
   node
   git
   wget
-  docker
-  boot2docker
+  wdiff
+  dos2unix
   fish
-  offline-imap
+  macvim
+  ivy
+  leiningen
+  the_silver_searcher
 )
 
 echo "installing binaries..."
@@ -43,38 +46,25 @@ brew tap caskroom/versions
 
 # Apps
 apps=(
-  alfred
-  dropbox
-  google-chrome
+  java
   iterm2
-  sublime-text3
-  atom
-  flux
-  sketch
-  skype
-  intellij-idea
-  clipmenu
+  virtualbox
+  sourcetree
+  tunnelblick
+  disk-inventory-x
+  selfcontrol
+  google-chrome
+  firefox
   evernote
   skitch
-  onepassword
-  viscosity
+  skype
   hipchat
-  bartender
-  totalfinder
-  p4merge
-  gopro-studio
-  java7
-  sequel-pro
-  asepsis
   mplayerx
-  igetter
-  istat-menus
-  eye-fi
-  android-file-transfer
+  spotify
 )
 
 # Link apps to Alfred
-brew cask alfred link
+#brew cask alfred link
 
 # Install apps to /Applications
 # Default is: /Users/$user/Applications
@@ -89,7 +79,7 @@ GITHUB_KEY=~/.ssh/github_rsa
 SSH_CONFIG=~/.ssh/config
 
 if [ ! -f $GITHUB_KEY ]; then
-  ssh-keygen -t rsa -C "michal.tehnik@mictech.cz" -N '' -f $GITHUB_KEY
+  ssh-keygen -t rsa -C "daniel@kolman.cz" -N '' -f $GITHUB_KEY
   echo "Host GitHub github.com" >> $SSH_CONFIG
   echo "Hostname github.com" >> $SSH_CONFIG
   echo "IdentityFile $GITHUB_KEY" >> $SSH_CONFIG 
@@ -98,7 +88,7 @@ fi
 
 # dotfiles
 DOTFILES_DIR=~/dotfiles
-git clone https://github.com/MicTech/dotfiles.git $DOTFILES_DIR
+git clone https://github.com/kolman/dotfiles.git $DOTFILES_DIR
 
 # dotfiles - Git
 ln -s $DOTFILES_DIR/.gitconfig ~/.gitconfig
@@ -110,8 +100,6 @@ sudo bash -c "echo \"/usr/local/bin/fish\" >> /etc/shells"
 ## change default shell
 chsh -s /usr/local/bin/fish
 
-# iTerm2
-wget http://www.iterm2.com/hostedcolors/Solarized%20Dark.itermcolors -P ~/dotfiles/.local/iterm2
 
 # Mac OS X
 
