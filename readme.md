@@ -1,3 +1,3 @@
-# MicTech`s dotfiles for Windows and Mac
+# My dotfiles for Windows and Mac
 
-    curl -O https://raw.githubusercontent.com/MicTech/dotfiles/master/bootstrap.sh
+    curl -O https://raw.githubusercontent.com/kolman/dotfiles/master/bootstrap.sh
