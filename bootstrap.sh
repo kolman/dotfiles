@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+cd ~
+
 # Check for Homebrew,
 # Install if we don't have it
 if test ! $(which brew); then
