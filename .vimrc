@@ -16,6 +16,11 @@ Plugin 'mileszs/ack.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'bling/vim-airline'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-surround'
+
+Plugin 'pangloss/vim-javascript'
+
 Plugin 'morhetz/gruvbox' " color scheme
 
 " All of your Plugins must be added before the following line
@@ -26,6 +31,8 @@ filetype plugin indent on    " required
 set expandtab
 set shiftwidth=4
 set softtabstop=4
+" Indent to correct location with tab
+set smarttab
 
 " Enable line numbers
 set number
@@ -33,6 +40,12 @@ set number
 syntax on
 " Highlight current line
 set cursorline
+" Ignore case when searching
+set ignorecase
+" ...unless there's a capital letter in the query
+set smartcase
+" More undos
+set undolevels=1000
 
 "Automatically save files when switching buffers in vim
 set autowriteall
@@ -69,3 +82,9 @@ nnoremap § :CtrlPMRU<cr>
 " respect .gitignore
 " https://github.com/kien/ctrlp.vim/issues/273
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+
+" associate *.uii with xml filetype
+au BufRead,BufNewFile *.uii setlocal ft=xml
+
+" Set diff to be always vertical
+set diffopt=vertical,filler
