@@ -23,3 +23,5 @@
 	cmd = mvim -f -d \"$LOCAL\" \"$REMOTE\"
 	path =
 
+[credential]
+	helper = osxkeychain
