@@ -2,7 +2,7 @@
 	name = Daniel Kolman
 	email = daniel@kolman.cz
 [core]
-	excludesfile = /Users/dkolman/dotfiles/.gitignore_global
+	excludesfile = ~/.gitignore
 	editor = vim
 [branch]
 	autosetuprebase = always
