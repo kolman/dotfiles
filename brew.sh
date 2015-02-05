@@ -54,6 +54,7 @@ apps=(
   hipchat
   mplayerx
   spotify
+  spectacle
 )
 
 # Install apps to /Applications
