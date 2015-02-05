@@ -50,6 +50,7 @@ plugins=(gitfast)
 # User configuration
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+#export PATH=/opt/local/bin:/opt/local/sbin:/opt/oracle/ohome/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -78,3 +79,26 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# coreutils aliases
+alias realpath=grealpath
+
+# redirecting vim to macvim terminal app
+mvimlink=$(greadlink -f $(which mvim))
+mvimdir=$(realpath $(dirname $mvimlink)/..)
+alias vim=$mvimdir/MacVim.app/Contents/MacOS/Vim
+export PATH=$mvimdir/MacVim.app/Contents/MacOS:$PATH
+
+# git aliases
+alias gf='git fetch'
+alias gr='git rebase'
+alias st='git stash'
+alias pop='git stash pop'
+alias gmt='git mergetool'
+
+# ven aliases
+v() { ./v $* && terminal-notifier -message "Operation $* DONE." -title "Vendavo" && say nechum and makay }
+alias vut='v run-realjunit skipTests=false'
+alias d1='v dev1'
+alias d1n='v dev1-noschema'
+alias d2='v dev2'

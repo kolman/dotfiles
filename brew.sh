@@ -14,6 +14,7 @@ brew update
 brew install bash
 
 binaries=(
+  coreutils
   rename
   python
   node
