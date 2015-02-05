@@ -13,8 +13,8 @@ chmod +x brew.sh
 
 cd ~
 
-# oh-my-fish
-curl -L https://github.com/bpinto/oh-my-fish/raw/master/tools/install.fish | fish
+# vundle
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 # Setup GitHub
 GITHUB_KEY=~/.ssh/github_rsa
@@ -28,14 +28,10 @@ if [ ! -f $GITHUB_KEY ]; then
   echo "\n" >> $SSH_CONFIG
 fi
 
-
-# fish
-## add fish to list of shells
-sudo bash -c "echo \"/usr/local/bin/fish\" >> /etc/shells"
-
-## change default shell
-chsh -s /usr/local/bin/fish
-
+# oh-my-zsh
+git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+chsh -s /bin/zsh
 
 # Mac OS X
 

@@ -21,7 +21,6 @@ binaries=(
   wget
   wdiff
   dos2unix
-  fish
   macvim
   ivy
   leiningen
@@ -59,4 +58,6 @@ apps=(
 # Default is: /Users/$user/Applications
 echo "installing apps..."
 brew cask install --appdir="/Applications" ${apps[@]}
+
+brew cask cleanup
 
