@@ -25,6 +25,7 @@ binaries=(
   ivy
   leiningen
   the_silver_searcher
+  terminal-notifier
 )
 
 echo "installing binaries..."
