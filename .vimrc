@@ -23,6 +23,8 @@ Plugin 'tpope/vim-surround'
 
 Plugin 'Valloric/YouCompleteMe'
 
+""""""" JavaScript 
+Plugin 'marijnh/tern_for_vim'
 Plugin 'pangloss/vim-javascript'
 
 Plugin 'morhetz/gruvbox' " color scheme

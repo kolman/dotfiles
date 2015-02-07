@@ -24,6 +24,11 @@ cd ~/.vim/bundle/YouCompleteMe
 ./install.sh --clang-completer
 cd ~
 
+# install TernJS for Vim
+cd ~/.vim/bundle/tern_for_vim
+npm install
+cd ~
+
 # Setup GitHub
 GITHUB_KEY=~/.ssh/github_rsa
 SSH_CONFIG=~/.ssh/config
