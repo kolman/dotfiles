@@ -27,7 +27,9 @@ binaries=(
   leiningen
   the_silver_searcher
   terminal-notifier
+  cmake
 )
+# note: cmake is required for YouCompleteMe
 
 echo "installing binaries..."
 brew install ${binaries[@]}

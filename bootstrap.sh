@@ -16,6 +16,14 @@ cd ~
 # vundle
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
+# install vim plugins
+mvim +PluginInstall +qall
+
+# compile YouCompleteMe
+cd ~/.vim/bundle/YouCompleteMe
+./install.sh --clang-completer
+cd ~
+
 # Setup GitHub
 GITHUB_KEY=~/.ssh/github_rsa
 SSH_CONFIG=~/.ssh/config

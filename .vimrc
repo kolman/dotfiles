@@ -9,15 +9,19 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'tpope/vim-sensible' " sensible defaults
+" Git
 Plugin 'tpope/vim-fugitive'
 Plugin 'gregsexton/gitv'
 Plugin 'airblade/vim-gitgutter'
+
 Plugin 'mileszs/ack.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'bling/vim-airline'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-surround'
+
+Plugin 'Valloric/YouCompleteMe'
 
 Plugin 'pangloss/vim-javascript'
 
@@ -46,6 +50,8 @@ set ignorecase
 set smartcase
 " More undos
 set undolevels=1000
+" hide scrollbars
+set guioptions-=rL
 
 "Automatically save files when switching buffers in vim
 set autowriteall
@@ -88,3 +94,6 @@ au BufRead,BufNewFile *.uii setlocal ft=xml
 
 " Set diff to be always vertical
 set diffopt=vertical,filler
+
+"YouCompleteMe
+let g:syntastic_always_populate_loc_list = 1
