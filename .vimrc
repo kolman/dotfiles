@@ -25,6 +25,7 @@ Plugin 'Valloric/YouCompleteMe'
 
 """"""" JavaScript 
 Plugin 'marijnh/tern_for_vim'
+Plugin 'facebook/vim-flow'
 Plugin 'pangloss/vim-javascript'
 
 Plugin 'morhetz/gruvbox' " color scheme

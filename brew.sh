@@ -28,6 +28,7 @@ binaries=(
   the_silver_searcher
   terminal-notifier
   cmake
+  flow
 )
 # note: cmake is required for YouCompleteMe
 
