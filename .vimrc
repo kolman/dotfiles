@@ -19,14 +19,36 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'bling/vim-airline'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
+Plugin 'Raimondi/delimitMate'
 
 Plugin 'Valloric/YouCompleteMe'
 
+Plugin 'scrooloose/syntastic'
+
+Plugin 'editorconfig/editorconfig-vim'
+
 """"""" JavaScript 
-Plugin 'marijnh/tern_for_vim'
-Plugin 'facebook/vim-flow'
+"Plugin 'marijnh/tern_for_vim'
+"Plugin 'facebook/vim-flow'
+"Plugin 'claco/jasmine.vim'
 Plugin 'pangloss/vim-javascript'
+Plugin 'jelera/vim-javascript-syntax' 
+Plugin 'lukaszb/vim-web-indent'
+Plugin 'elzr/vim-json'
+Plugin 'mxw/vim-jsx'
+Plugin 'othree/javascript-libraries-syntax.vim'
+"Plugin 'Shutnik/jshint2.vim'
+
+"Plugin 'maksimr/vim-jsbeautify'
+"Plugin 'einars/js-beautify'
+
+Plugin 'kolman/vim-esformatter'
+
+""""""" HTML
+Plugin 'othree/html5.vim'
+Plugin 'gregsexton/MatchTag' " highlight matching tags
 
 Plugin 'morhetz/gruvbox' " color scheme
 
@@ -78,16 +100,41 @@ if !has('win32') && (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8')
     let &listchars = "tab:\u21e5 ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
 endif
 set list " display whitespace
+" remove trailing whitespace before saving a file
+"autocmd FileType c,cpp,python,ruby,java,javascript autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+" useful tricks
+"keep visual selection after indenting block
+vnoremap < <<CR>gv
+vnoremap > ><CR>gv
+
+"NERDTree
+" find current file in tree
+map <leader>r :NERDTreeFind<cr>
 
 "Ack
 let g:ackprg='ag --nogroup --nocolor --column'
 " find usages
 nmap <a-F7> :Ack -w <c-r><c-w><cr>
-nnoremap <leader>a :Ack
+nnoremap <leader>a :Ack<Space>
 
 "CtrlP
 " map § to open MRU list in CtrlP
+nnoremap <c-e> :CtrlPMRU<cr>
+inoremap <c-e> <Esc>:CtrlPMRU<cr>
+
+if has("gui_macvim")
+    " remap command-e
+    nnoremap <d-e> :CtrlPMRU<cr>
+    inoremap <d-e> <Esc>:CtrlPMRU<cr>
+endif
+
+" useful on czech keyboard:
 nnoremap § :CtrlPMRU<cr>
+
+" gw opens CtrlP and inserts word under cursor (Go Word)
+nmap gw :CtrlP<CR><C-\>w
+
 " respect .gitignore
 " https://github.com/kien/ctrlp.vim/issues/273
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
@@ -97,6 +144,28 @@ au BufRead,BufNewFile *.uii setlocal ft=xml
 
 " Set diff to be always vertical
 set diffopt=vertical,filler
+au BufEnter,BufWinEnter,FileReadPre,FilterWritePre * if &diff | set cursorline! | endif
 
-"YouCompleteMe
+" EditorConfig settings
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+
+" TernJS
+"autocmd FileType javascript nnoremap [<C-d> :TernDef<CR>
+
+" JSXHint
+"Enabling JSX syntax on .js files (not only .jsx)
+let g:jsx_ext_required = 0
+
+" Syntastic
 let g:syntastic_always_populate_loc_list = 1
+"Set syntastic checker for js files to JSXHint
+let g:syntastic_javascript_checkers = ['eslint']
+"let g:syntastic_javascript_checkers = ['jsxhint']
+"let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
+"let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Esformatter
+nnoremap <silent> <leader>es :Esformatter<CR>gg=G``
+vnoremap <silent> <leader>es :EsformatterVisual<CR>gv=
+

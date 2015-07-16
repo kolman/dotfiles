@@ -25,6 +25,7 @@ binaries=(
   macvim
   ivy
   leiningen
+  boot-clj
   the_silver_searcher
   terminal-notifier
   cmake
@@ -66,4 +67,18 @@ echo "installing apps..."
 brew cask install --appdir="/Applications" ${apps[@]}
 
 brew cask cleanup
+
+# emacs
+brew install emacs --with-cocoa
+brew linkapps emacs
+
+# npm modules
+npm install -g jshint
+npm install -g syntastic-react
+npm install -g react-tools
+npm install -g babel
+npm install -g eslint
+npm install -g eslint-plugin-react
+npm install -g babel-eslint
+npm install -g esformatter
 

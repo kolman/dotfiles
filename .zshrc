@@ -53,6 +53,28 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 #export PATH=/opt/local/bin:/opt/local/sbin:/opt/oracle/ohome/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 # export MANPATH="/usr/local/man:$MANPATH"
 
+DYLD_LIBRARY_PATH=/opt/oracle/ohome/lib
+SQLPATH=/opt/oracle/ohome
+ORACLE_HOME=/opt/oracle/ohome
+export DYLD_LIBRARY_PATH
+export SQLPATH
+export ORACLE_HOME
+export PATH=$ORACLE_HOME/bin:$PATH
+#export LC_ALL=en_US.utf-8
+
+LC_ALL=en_US.utf-8
+LANG=en_US.utf-8
+export LC_ALL
+export LANG
+# oracle
+#DYLD_LIBRARY_PATH=/opt/oracle
+#SQLPATH=/opt/oracle
+#ORACLE_HOME=/opt/oracle
+#export DYLD_LIBRARY_PATH
+#export SQLPATH
+#export ORACLE_HOME
+#export PATH=$ORACLE_HOME:$ORACLE_HOME/ohome/bin:$PATH
+
 source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
@@ -89,6 +111,9 @@ mvimdir=$(realpath $(dirname $mvimlink)/..)
 alias vim=$mvimdir/MacVim.app/Contents/MacOS/Vim
 export PATH=$mvimdir/MacVim.app/Contents/MacOS:$PATH
 
+# emacs
+alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+
 # git aliases
 alias gf='git fetch'
 alias gr='git rebase'
@@ -97,6 +122,8 @@ alias pop='git stash pop'
 alias gmt='git mergetool'
 
 # ven aliases
+export VEN_3RDPARTY_HOME=~/git/3rdparty
+
 v() { ./v $* && terminal-notifier -message "Operation $* DONE." -title "Vendavo" && say nechum and makay }
 alias vut='v run-realjunit skipTests=false'
 alias d1='v dev1'

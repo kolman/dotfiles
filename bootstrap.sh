@@ -29,6 +29,11 @@ cd ~/.vim/bundle/tern_for_vim
 npm install
 cd ~
 
+# install js-beautify
+cd ~/.vim/bundle/js-beautify
+git submodule update --init --recursive
+cd ~
+
 # Setup GitHub
 GITHUB_KEY=~/.ssh/github_rsa
 SSH_CONFIG=~/.ssh/config
@@ -43,7 +48,6 @@ fi
 
 # oh-my-zsh
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 chsh -s /bin/zsh
 
 # Mac OS X
