@@ -53,6 +53,10 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 #export PATH=/opt/local/bin:/opt/local/sbin:/opt/oracle/ohome/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 # export MANPATH="/usr/local/man:$MANPATH"
 
+export JAVA_HOME=`/usr/libexec/java_home`
+#export JAVA_HOME_VENDAVO=`/usr/libexec/java_home -v 1.6`
+export JAVA_HOME_VENDAVO=$JAVA_HOME
+
 DYLD_LIBRARY_PATH=/opt/oracle/ohome/lib
 SQLPATH=/opt/oracle/ohome
 ORACLE_HOME=/opt/oracle/ohome
@@ -66,14 +70,6 @@ LC_ALL=en_US.utf-8
 LANG=en_US.utf-8
 export LC_ALL
 export LANG
-# oracle
-#DYLD_LIBRARY_PATH=/opt/oracle
-#SQLPATH=/opt/oracle
-#ORACLE_HOME=/opt/oracle
-#export DYLD_LIBRARY_PATH
-#export SQLPATH
-#export ORACLE_HOME
-#export PATH=$ORACLE_HOME:$ORACLE_HOME/ohome/bin:$PATH
 
 source $ZSH/oh-my-zsh.sh
 

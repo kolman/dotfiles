@@ -21,6 +21,7 @@
      auto-completion
      ;; better-defaults
      emacs-lisp
+     git
      ;; git markdown org (shell :variables shell-default-height 30
      ;; shell-default-position 'bottom) syntax-checking
      version-control
@@ -32,7 +33,7 @@
      ;; being wrapped in a layer. If you need some configuration for these
      ;; packages then consider to create a layer, you can also put the
      ;; configuration in `dotspacemacs/config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(editorconfig)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -80,7 +81,7 @@ before layers configuration."
                                :size 16
                                :weight normal
                                :width normal
-                               :powerline-scale 1.7)
+                               :powerline-scale 1.3)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -99,7 +100,7 @@ before layers configuration."
    ;; auto-save the file in-place, `cache' to auto-save the file to another
    ;; file stored in the cache directory and `nil' to disable auto-saving.
    ;; Default value is `cache'.
-   dotspacemacs-auto-save-file-location 'cache
+   dotspacemacs-auto-save-file-location 'original
    ;; If non nil then `ido' replaces `helm' for some commands. For now only
    ;; `find-files' (SPC f f) is replaced.
    dotspacemacs-use-ido nil
@@ -161,6 +162,7 @@ before layers configuration."
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;;  (require 'web-mode)
   ;; use web-mode for .jsx files
 ;;  (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))

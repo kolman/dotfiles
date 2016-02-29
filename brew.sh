@@ -30,6 +30,7 @@ binaries=(
   terminal-notifier
   cmake
   flow
+  editorconfig
 )
 # note: cmake is required for YouCompleteMe
 

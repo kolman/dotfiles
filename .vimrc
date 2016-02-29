@@ -8,13 +8,15 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
+Plugin 'wincent/ferret' " search and replace
+
 Plugin 'tpope/vim-sensible' " sensible defaults
 " Git
 Plugin 'tpope/vim-fugitive'
 Plugin 'gregsexton/gitv'
 Plugin 'airblade/vim-gitgutter'
 
-Plugin 'mileszs/ack.vim'
+" Plugin 'mileszs/ack.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'bling/vim-airline'
@@ -69,12 +71,18 @@ set number
 syntax on
 " Highlight current line
 set cursorline
+" Highlight search result
+" note: use :noh to get rid of highlight
+set hlsearch
+" Press Space to turn off highlighting and clear any message already displayed.
+nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 " Ignore case when searching
 set ignorecase
 " ...unless there's a capital letter in the query
 set smartcase
 " More undos
-set undolevels=1000
+set undofile
+set undodir=~/.vim/undodir
 " hide scrollbars
 set guioptions-=rL
 
@@ -87,7 +95,7 @@ au FocusLost * silent! wa
 "fonts and colors
 if has('gui_running')
         set linespace=3
-        set guifont=Fantasque_Sans_Mono_Regular:h15
+        set guifont=Fantasque_Sans_Mono_Regular:h17
     else
         let g:gruvbox_italic=0
 endif
@@ -110,13 +118,15 @@ vnoremap > ><CR>gv
 
 "NERDTree
 " find current file in tree
-map <leader>r :NERDTreeFind<cr>
+map <leader>t :NERDTreeFind<cr>
 
 "Ack
-let g:ackprg='ag --nogroup --nocolor --column'
+"let g:ackprg='ag --nogroup --nocolor --column'
 " find usages
-nmap <a-F7> :Ack -w <c-r><c-w><cr>
-nnoremap <leader>a :Ack<Space>
+"nmap <a-F7> :Ack -w <c-r><c-w><cr>
+"nnoremap <leader>a :Ack<Space>
+
+"Ferret
 
 "CtrlP
 " map § to open MRU list in CtrlP
@@ -163,9 +173,11 @@ let g:syntastic_javascript_checkers = ['eslint']
 "let g:syntastic_javascript_checkers = ['jsxhint']
 "let g:syntastic_javascript_jsxhint_exec = 'jsx-jshint-wrapper'
 "let g:syntastic_check_on_open = 1
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 let g:syntastic_check_on_wq = 0
+nnoremap <leader>s :w<CR>:SyntasticCheck<CR>
 
 " Esformatter
-nnoremap <silent> <leader>es :Esformatter<CR>gg=G``
-vnoremap <silent> <leader>es :EsformatterVisual<CR>gv=
+nnoremap <leader>es :Esformatter<CR>gg=G``
+vnoremap <leader>es :EsformatterVisual<CR>gv=
 
