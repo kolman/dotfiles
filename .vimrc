@@ -166,6 +166,10 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 "Enabling JSX syntax on .js files (not only .jsx)
 let g:jsx_ext_required = 0
 
+" JSON
+"Do not hide quotes
+let g:vim_json_syntax_conceal = 0
+
 " Syntastic
 let g:syntastic_always_populate_loc_list = 1
 "Set syntastic checker for js files to JSXHint
