@@ -1,61 +1,60 @@
 set nocompatible
 filetype off
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin('~/.vim/plugged')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+Plug 'gmarik/Vundle.vim'
 
-Plugin 'wincent/ferret' " search and replace
+Plug 'wincent/ferret' " search and replace
 
-Plugin 'tpope/vim-sensible' " sensible defaults
+Plug 'tpope/vim-sensible' " sensible defaults
 " Git
-Plugin 'tpope/vim-fugitive'
-Plugin 'gregsexton/gitv'
-Plugin 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'gregsexton/gitv'
+Plug 'airblade/vim-gitgutter'
 
-" Plugin 'mileszs/ack.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'bling/vim-airline'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'Raimondi/delimitMate'
+" Plug 'mileszs/ack.vim'
+Plug 'kien/ctrlp.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'bling/vim-airline'
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'Raimondi/delimitMate'
 
-Plugin 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 
-Plugin 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 
-Plugin 'editorconfig/editorconfig-vim'
+Plug 'editorconfig/editorconfig-vim'
 
 """"""" JavaScript 
-"Plugin 'marijnh/tern_for_vim'
-"Plugin 'facebook/vim-flow'
-"Plugin 'claco/jasmine.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'jelera/vim-javascript-syntax' 
-Plugin 'lukaszb/vim-web-indent'
-Plugin 'elzr/vim-json'
-Plugin 'mxw/vim-jsx'
-Plugin 'othree/javascript-libraries-syntax.vim'
-"Plugin 'Shutnik/jshint2.vim'
+Plug 'othree/yajs.vim'
+Plug 'gavocanov/vim-js-indent'
+"Plug 'marijnh/tern_for_vim'
+"Plug 'facebook/vim-flow'
+"Plug 'claco/jasmine.vim'
+"Plug 'pangloss/vim-javascript'
+"Plug 'jelera/vim-javascript-syntax' 
+"Plug 'lukaszb/vim-web-indent'
+Plug 'elzr/vim-json'
+Plug 'mxw/vim-jsx'
+Plug 'othree/javascript-libraries-syntax.vim'
+"Plug 'Shutnik/jshint2.vim'
 
-"Plugin 'maksimr/vim-jsbeautify'
-"Plugin 'einars/js-beautify'
+"Plug 'maksimr/vim-jsbeautify'
+"Plug 'einars/js-beautify'
 
-Plugin 'kolman/vim-esformatter'
+Plug 'millermedeiros/vim-esformatter'
 
 """"""" HTML
-Plugin 'othree/html5.vim'
-Plugin 'gregsexton/MatchTag' " highlight matching tags
+Plug 'othree/html5.vim'
+Plug 'gregsexton/MatchTag' " highlight matching tags
 
-Plugin 'morhetz/gruvbox' " color scheme
+Plug 'morhetz/gruvbox' " color scheme
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
+call plug#end()
 filetype plugin indent on    " required
 
 "spaces instead of tabs (tabs are so 90's)

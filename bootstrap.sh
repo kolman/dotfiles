@@ -13,26 +13,27 @@ chmod +x brew.sh
 
 cd ~
 
-# vundle
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+# vim-plug
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # install vim plugins
-mvim +PluginInstall +qall
+mvim +PlugInstall +qall
 
 # compile YouCompleteMe
-cd ~/.vim/bundle/YouCompleteMe
-./install.sh --clang-completer
-cd ~
+#cd ~/.vim/bundle/YouCompleteMe
+#./install.sh --clang-completer
+#cd ~
 
 # install TernJS for Vim
-cd ~/.vim/bundle/tern_for_vim
-npm install
-cd ~
+#cd ~/.vim/bundle/tern_for_vim
+#npm install
+#cd ~
 
 # install js-beautify
-cd ~/.vim/bundle/js-beautify
-git submodule update --init --recursive
-cd ~
+#cd ~/.vim/bundle/js-beautify
+#git submodule update --init --recursive
+#cd ~
 
 # Setup GitHub
 GITHUB_KEY=~/.ssh/github_rsa
