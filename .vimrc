@@ -3,16 +3,33 @@ filetype off
 
 call plug#begin('~/.vim/plugged')
 
-" let Vundle manage Vundle, required
-Plug 'gmarik/Vundle.vim'
+" Async
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
 Plug 'wincent/ferret' " search and replace
 
 Plug 'tpope/vim-sensible' " sensible defaults
+
+Plug 'ludovicchabant/vim-gutentags'
+
+" Autocompletition
+Plug 'Shougo/neocomplete.vim'
+" Mixed-filetype completion for Shougo complete, e.g. highlight JS within Markdown fenced code blocks.
+Plug 'Shougo/context_filetype.vim'
+" Include completion
+Plug 'Shougo/neoinclude.vim'
+
+" color scheme
+Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
+
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'gregsexton/gitv'
 Plug 'airblade/vim-gitgutter'
+
+" better split/join lines with gS gJ
+Plug 'AndrewRadev/splitjoin.vim'
 
 " Plug 'mileszs/ack.vim'
 Plug 'kien/ctrlp.vim'
@@ -23,15 +40,18 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'Raimondi/delimitMate'
 
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 
 Plug 'scrooloose/syntastic'
 
-Plug 'editorconfig/editorconfig-vim'
+Plug 'sgur/vim-editorconfig'
 
 """"""" JavaScript 
-Plug 'othree/yajs.vim'
-Plug 'gavocanov/vim-js-indent'
+Plug 'othree/yajs.vim', { 'for': 'javascript' }
+Plug 'gavocanov/vim-js-indent', { 'for': 'javascript' }
+Plug 'othree/jspc.vim' " JS parameter completition
+Plug 'marijnh/tern_for_vim', { 'do': 'npm install' }
+
 "Plug 'marijnh/tern_for_vim'
 "Plug 'facebook/vim-flow'
 "Plug 'claco/jasmine.vim'
@@ -50,12 +70,18 @@ Plug 'millermedeiros/vim-esformatter'
 
 """"""" HTML
 Plug 'othree/html5.vim'
+Plug 'othree/xml.vim'
 Plug 'gregsexton/MatchTag' " highlight matching tags
 
-Plug 'morhetz/gruvbox' " color scheme
+""""""" CSS
+Plug 'othree/csscomplete.vim'
+
+""""""" Clojure
+Plug 'tpope/vim-fireplace'
+Plug 'vim-scripts/paredit.vim'
 
 call plug#end()
-filetype plugin indent on    " required
+filetype plugin indent on
 
 "spaces instead of tabs (tabs are so 90's)
 set expandtab
@@ -157,6 +183,31 @@ au BufEnter,BufWinEnter,FileReadPre,FilterWritePre * if &diff | set cursorline! 
 
 " EditorConfig settings
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+
+" Neocomplete
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#enable_camel_case = 1
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  " return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+  " For no inserting <CR> key.
+  return pumvisible() ? "\<C-y>" : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+set completeopt-=preview              " don't open scratch preview
+set completeopt+=menu,menuone         " show PUM, even for one thing
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=tern#Complete
+"autocmd FileType javascript setlocal omnifunc=jspc#omni
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " TernJS
 "autocmd FileType javascript nnoremap [<C-d> :TernDef<CR>

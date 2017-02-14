@@ -63,7 +63,7 @@ ORACLE_HOME=/opt/oracle/ohome
 export DYLD_LIBRARY_PATH
 export SQLPATH
 export ORACLE_HOME
-export PATH=$ORACLE_HOME/bin:$PATH
+export PATH=$ORACLE_HOME/bin:/opt/instantclient_11_2:$PATH
 #export LC_ALL=en_US.utf-8
 
 LC_ALL=en_US.utf-8
@@ -125,3 +125,17 @@ alias vut='v run-realjunit skipTests=false'
 alias d1='v dev1'
 alias d1n='v dev1-noschema'
 alias d2='v dev2'
+
+# python
+# pip should only run if there is a virtualenv currently activated
+export PIP_REQUIRE_VIRTUALENV=true
+gpip(){
+    PIP_REQUIRE_VIRTUALENV="" pip "$@"
+}
+
+export PATH=$HOME/anaconda/bin:$PATH
+
+#. /Users/dkolman/torch/install/bin/torch-activate
+
+# Enables changing of cursor shape in neovim
+export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
