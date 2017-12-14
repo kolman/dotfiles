@@ -80,6 +80,9 @@ Plug 'othree/csscomplete.vim'
 Plug 'tpope/vim-fireplace'
 Plug 'vim-scripts/paredit.vim'
 
+""""""" Reason
+Plug 'reasonml/vim-reason'
+
 call plug#end()
 filetype plugin indent on
 
