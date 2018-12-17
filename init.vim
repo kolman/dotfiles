@@ -4,8 +4,8 @@ let mapleader = "\<Space>"
 
 "spaces instead of tabs (tabs are so 90's)
 set expandtab
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set softtabstop=2
 
 " Enable line numbers
 set number
@@ -54,6 +54,9 @@ Plug 'morhetz/gruvbox'
 Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'junegunn/seoul256.vim'
 
+" Code
+Plug 'sbdchd/neoformat'
+
 " Git
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -70,10 +73,12 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 """"""" Clojure
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'tpope/vim-classpath', { 'for': 'clojure' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': 'clojure' }
 Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }
 Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'clojure-vim/async-clj-omni'
+Plug 'venantius/vim-cljfmt'
 
 call plug#end()
 
@@ -141,4 +146,7 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 autocmd FileType vim,c,cpp,java,php,ruby,python,clojure,javascript autocmd BufWritePre <buffer> :call TrimWhitespace()
+
+" automatically format js files with prettier on save
+autocmd BufWritePre *.js Neoformat
 
