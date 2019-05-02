@@ -31,7 +31,7 @@ ZSH_THEME="robbyrussell"
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -117,14 +117,24 @@ alias st='git stash'
 alias pop='git stash pop'
 alias gmt='git mergetool'
 
-# ven aliases
-export VEN_3RDPARTY_HOME=~/git/3rdparty
+# docker
+alias dokcer=docker
+alias dok=docker
+
+# kills flow
+alias killflow='pkill -f flow'
 
 v() { ./v $* && terminal-notifier -message "Operation $* DONE." -title "Vendavo" && say nechum and makay }
-alias vut='v run-realjunit skipTests=false'
 alias d1='v dev1'
 alias d1n='v dev1-noschema'
 alias d2='v dev2'
+
+# ven gradle aliases
+grtest() { ./gradlew :vendavo-inttests:vendavo-inttests-tests:test -Dtest.single="*$1*" -x :vendavo-tools:test -x :vendavo-inttests:vendavo-inttests-world:test -x :vendavo-inttests:vendavo-inttests-world:prepareIntTest $2 $3 }
+
+alias grinttestsprepare='./gradlew :vendavo-inttests:vendavo-inttests-world:prepareIntTest -x test'
+alias grbuild='./gradlew build -x test && d1n --skipTests=true && ./gradlew createExplodedEAR'
+alias grebuild='./gradlew clean build -x test && d1n --skipTests=true && ./gradlew createExplodedEAR'
 
 # python
 # pip should only run if there is a virtualenv currently activated
@@ -133,9 +143,25 @@ gpip(){
     PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }
 
-export PATH=$HOME/anaconda/bin:$PATH
-
-#. /Users/dkolman/torch/install/bin/torch-activate
+gpip3(){
+    PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+}
 
 # Enables changing of cursor shape in neovim
 export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+
+# OPAM configuration
+. /Users/dkolman/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+# golang
+export PATH=$PATH:/usr/local/opt/go/libexec/bin
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+

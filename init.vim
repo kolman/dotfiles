@@ -1,5 +1,9 @@
 filetype off
 
+" enable project specific .nvimrc files
+set exrc
+set secure
+
 let mapleader = "\<Space>"
 
 "spaces instead of tabs (tabs are so 90's)
@@ -28,6 +32,12 @@ set autowriteall
 "Automatically save files when vim loses focus (except for new files)
 au FocusLost * silent! wa
 
+" Automatically restore cursor position when reopening file
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
 " Clipboard
 "Copy to clipboard
 nnoremap <leader>y "+y
@@ -37,33 +47,52 @@ nnoremap <leader>p "+p
 vnoremap <leader>p "+p
 
 " whitespace
-"nicer whitespace chars, used to be in sensible.vim but removed:
-"https://github.com/tpope/vim-sensible/commit/38fea1c9356d46cc285f67c9f8e7bc3ba39fc0be
-"if !has('win32') && (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8')
-"    let &listchars = "tab:\u21e5 ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
-"endif
 set list " display whitespace
 
+let g:python_host_prog  = '/usr/local/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
+
+" use ALE for completion
+"let g:ale_completion_enabled = 1 " turned off, completition provided by
+"deoplete
+let g:ale_linters = {
+\   'python': ['flake8', 'pylint'],
+\   'javascript': ['tsserver', 'flow-language-server', 'prettier', 'eslint'],
+\   'vue': ['eslint']
+\}
+let g:ale_fixers = {
+\    'javascript': ['prettier'],
+\    'vue': ['eslint'],
+\    'scss': ['prettier']
+\}
 
 " install plug-vim plugins
 call plug#begin("~/.local/share/nvim/plugged")
 
+" general
+Plug 'wincent/terminus' " support for mouse and cursor in terminal
+Plug 'sheerun/vim-polyglot' " support for many languages
+Plug 'tpope/vim-vinegar' " better netrw
+Plug 'tpope/vim-unimpaired' " [ and ] mappings
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+
 " color scheme
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
-Plug 'chriskempson/vim-tomorrow-theme'
-Plug 'junegunn/seoul256.vim'
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
+Plug 'ayu-theme/ayu-vim'
+Plug 'rakr/vim-one'
 
 " Code
-Plug 'sbdchd/neoformat'
+Plug 'w0rp/ale'
 
 " Git
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 Plug 'tpope/vim-repeat'
-Plug 'kien/ctrlp.vim'
-Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-surround' " add and remove brackets
@@ -91,20 +120,25 @@ if has('gui_running')
     else
         let g:gruvbox_italic=0
 endif
-colorscheme gruvbox
-set background=dark
+
+let ayucolor="dark"
+colorscheme ayu
+
 
 " fugitive
 nnoremap <leader>gs :Gstatus<cr>
+"this is actually a fzf command but it shows commits for the file
+nnoremap <leader>gh :BCommits<cr>
 
-" CtrlP
-nnoremap <leader>o :CtrlP<cr>
-nnoremap <leader>e :CtrlPMRU<cr>
-" leader-b opens CtrlP and inserts word under cursor (Go Word)
-nnoremap <leader>b :CtrlP<cr><c-\>w
-" respect .gitignore
-" https://github.com/kien/ctrlp.vim/issues/273
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+" File search
+nnoremap <leader>O :Files<cr>
+nnoremap <leader>o :GFiles<cr>
+nnoremap <leader>e :History<cr>
+" search lines in the current buffer
+nnoremap <leader>l :BLines<cr>
+
+" Find in files
+nnoremap <leader>a :Rg <c-r><c-w><cr>
 
 " NERDTree
 " find current file in tree
@@ -114,6 +148,29 @@ map <leader>t :NERDTreeFind<cr>
 "toggle comment
 nmap <leader>/ <leader>c<space>
 vmap <leader>/ <leader>c<space>
+
+nmap cd :ALEGoToDefinition<cr>
+nmap ch :ALEHover<cr>
+nmap cf :ALEFix<cr>
+nmap cr :ALEFindReferences<cr>
+
+" deoplete autocompletition
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#source('ale', 'rank', 999)
+
+"clojure with async-clj-omni
+"let g:deoplete#keyword_patterns = {}
+"let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
+
+" deoplete complete on TAB
+function! s:check_back_space() abort "{{{
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction"}}}
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ deoplete#manual_complete()
 
 " clojure
 "activate rainbow parentheses
@@ -133,11 +190,6 @@ if has("nvim")
   nmap ,b ggVG,e
 endif
 
-" deoplete autocompletition
-let g:deoplete#enable_at_startup = 1
-"clojure with async-clj-omni
-let g:deoplete#keyword_patterns = {}
-let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
 
 " Trim whitespace on save
 fun! TrimWhitespace()
@@ -147,6 +199,5 @@ fun! TrimWhitespace()
 endfun
 autocmd FileType vim,c,cpp,java,php,ruby,python,clojure,javascript autocmd BufWritePre <buffer> :call TrimWhitespace()
 
-" automatically format js files with prettier on save
-autocmd BufWritePre *.js Neoformat
-
+" Support flow syntax by vim-javascript (used by polyglot)
+let g:javascript_plugin_flow = 1
