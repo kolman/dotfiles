@@ -49,6 +49,7 @@ vnoremap <leader>p "+p
 " whitespace
 set list " display whitespace
 
+" important for plugins
 let g:python_host_prog  = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
@@ -74,9 +75,9 @@ Plug 'wincent/terminus' " support for mouse and cursor in terminal
 Plug 'sheerun/vim-polyglot' " support for many languages
 Plug 'tpope/vim-vinegar' " better netrw
 Plug 'tpope/vim-unimpaired' " [ and ] mappings
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy search
 Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree' " file tree
 
 " color scheme
 Plug 'altercation/vim-colors-solarized'
@@ -156,7 +157,10 @@ nmap cr :ALEFindReferences<cr>
 
 " deoplete autocompletition
 let g:deoplete#enable_at_startup = 1
-call deoplete#custom#source('ale', 'rank', 999)
+call deoplete#custom#option('sources', {
+  \ '_': ['ale', 'buffer', 'file', 'around'],
+  \})
+"call deoplete#custom#source('ale', 'rank', 999)
 
 "clojure with async-clj-omni
 "let g:deoplete#keyword_patterns = {}
@@ -168,9 +172,12 @@ function! s:check_back_space() abort "{{{
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction"}}}
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ pumvisible() ? "\<C-y>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ deoplete#manual_complete()
+
+" automatically select the first item in the autocomplete menu
+set completeopt+=noinsert
 
 " clojure
 "activate rainbow parentheses
@@ -179,7 +186,7 @@ augroup rainbow_lisp
   autocmd FileType lisp,clojure,scheme RainbowParentheses
 augroup END
 
-if has("nvim")
+"if has("nvim")
   " Open terminal and run lein figwheel
   nmap <Leader>fig :below new<cr>:terminal<CR>lein figwheel<CR><C-\><C-n><C-w>p
   " Evaluate anything from the visual mode in the next window
@@ -188,7 +195,7 @@ if has("nvim")
   nmap ,e ^v%,e
   " Evaluate buffer"
   nmap ,b ggVG,e
-endif
+"endif
 
 
 " Trim whitespace on save
