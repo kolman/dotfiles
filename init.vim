@@ -17,6 +17,18 @@ set number
 " Highlight current line
 set cursorline
 
+" Always show signcolumn
+set signcolumn=yes
+
+" hide buffers instead of closing
+set hidden
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
 " Highlight search result
 " note: use :noh to get rid of highlight
 set hlsearch
@@ -32,11 +44,11 @@ set autowriteall
 "Automatically save files when vim loses focus (except for new files)
 au FocusLost * silent! wa
 
-" Automatically restore cursor position when reopening file
-autocmd BufReadPost *
-  \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
+" Automatically save and restore view (folds, cursor position etc)
+"if options are included in view, it will save/restore current directory
+set viewoptions-=options
+au BufWinLeave ?* silent! mkview
+au BufWinEnter ?* silent! loadview
 
 " Clipboard
 "Copy to clipboard
@@ -53,19 +65,35 @@ set list " display whitespace
 let g:python_host_prog  = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
-" use ALE for completion
-"let g:ale_completion_enabled = 1 " turned off, completition provided by
-"deoplete
-let g:ale_linters = {
-\   'python': ['flake8', 'pylint'],
-\   'javascript': ['tsserver', 'flow-language-server', 'prettier', 'eslint'],
-\   'vue': ['eslint']
-\}
-let g:ale_fixers = {
-\    'javascript': ['prettier'],
-\    'vue': ['eslint'],
-\    'scss': ['prettier']
-\}
+" autoclose HTML tags
+" filenames like *.xml, *.html, *.xhtml, ...
+" These are the file extensions where this plugin is enabled.
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
+
+" filenames like *.xml, *.xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.js'
+
+" filetypes like xml, html, xhtml, ...
+" These are the file types where this plugin is enabled.
+let g:closetag_filetypes = 'html,xhtml,phtml'
+
+" filetypes like xml, xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+let g:closetag_xhtml_filetypes = 'xhtml,jsx,javascript,javascript.jsx'
+
+" integer value [0|1]
+" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
+let g:closetag_emptyTags_caseSensitive = 1
+
+" dict
+" Disables auto-close if not in a "valid" region (based on filetype)
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion'
+    \ }
+
+" Shortcut for closing tags, default is '>'
+let g:closetag_shortcut = '>'
 
 " install plug-vim plugins
 call plug#begin("~/.local/share/nvim/plugged")
@@ -80,14 +108,13 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree' " file tree
 
 " color scheme
-Plug 'altercation/vim-colors-solarized'
+Plug 'iCyMind/NeoSolarized'
 Plug 'morhetz/gruvbox'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'ayu-theme/ayu-vim'
 Plug 'rakr/vim-one'
 
-" Code
-Plug 'w0rp/ale'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 
 " Git
 Plug 'airblade/vim-gitgutter'
@@ -101,10 +128,12 @@ Plug 'scrooloose/nerdcommenter'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
+Plug 'alvan/vim-closetag'
+
 """"""" Clojure
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'tpope/vim-classpath', { 'for': 'clojure' }
-Plug 'junegunn/rainbow_parentheses.vim', { 'for': 'clojure' }
+Plug 'junegunn/rainbow_parentheses.vim' " , { 'for': 'clojure' }
 Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': 'clojure' }
 Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'clojure-vim/async-clj-omni'
@@ -116,20 +145,57 @@ call plug#end()
 "use true colors in terminal
 set termguicolors
 if has('gui_running')
-        set linespace=3
-        set guifont=Fantasque_Sans_Mono_Regular:h17
-    else
-        let g:gruvbox_italic=0
+  set linespace=3
+  set guifont=Fantasque_Sans_Mono_Regular:h17
+else
+  let g:gruvbox_italic=0
 endif
 
 let ayucolor="dark"
+set background=dark
 colorscheme ayu
 
+" terminal
+
+" Terminal Function
+let g:term_buf = 0
+let g:term_win = 0
+function! TermToggle(height)
+    if win_gotoid(g:term_win)
+        hide
+    else
+        botright new
+        exec "resize " . a:height
+        try
+            exec "buffer " . g:term_buf
+        catch
+            call termopen($SHELL, {"detach": 0})
+            let g:term_buf = bufnr("")
+            set nonumber
+            set norelativenumber
+            set signcolumn=no
+        endtry
+        startinsert!
+        let g:term_win = win_getid()
+    endif
+endfunction
+
+"open in bottom split
+nnoremap <leader>x :call TermToggle(15)<cr>
+"inoremap <A-t> <Esc>:call TermToggle(15)<cr>
+"tnoremap <A-t> <C-\><C-n>:call TermToggle(15)<cr>
+
+"Esc to exit terminal mode
+tnoremap <Esc> <C-\><C-n>
 
 " fugitive
 nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gd :Gdiff<cr>
 "this is actually a fzf command but it shows commits for the file
 nnoremap <leader>gh :BCommits<cr>
+
+autocmd BufWritePost * GitGutter
 
 " File search
 nnoremap <leader>O :Files<cr>
@@ -138,46 +204,46 @@ nnoremap <leader>e :History<cr>
 " search lines in the current buffer
 nnoremap <leader>l :BLines<cr>
 
+" in visual mode, remap *
+vnoremap * "9y/<c-r>9<cr>
+
 " Find in files
-nnoremap <leader>a :Rg <c-r><c-w><cr>
+nnoremap <leader>b :Rg <c-r><c-w><cr>
+nnoremap <leader>r :Rg<space>
+"yank selection to register 9 and use it with Rg command
+vnoremap <leader>b "9y:Rg <c-r>9<cr>
 
 " NERDTree
-" find current file in tree
-map <leader>t :NERDTreeFind<cr>
+"show hidden files by default
+let NERDTreeShowHidden=1
+"find current file in tree
+fun! OpenNerdTree()
+    if line('$') == 1 && getline(1) == ''
+        NERDTree
+    else
+        NERDTreeFind
+    endif
+endf
+map <leader>t :call OpenNerdTree()<cr>
 
 " NERDCommenter
 "toggle comment
 nmap <leader>/ <leader>c<space>
 vmap <leader>/ <leader>c<space>
 
-nmap cd :ALEGoToDefinition<cr>
-nmap ch :ALEHover<cr>
-nmap cf :ALEFix<cr>
-nmap cr :ALEFindReferences<cr>
-
-" deoplete autocompletition
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('sources', {
-  \ '_': ['ale', 'buffer', 'file', 'around'],
-  \})
-"call deoplete#custom#source('ale', 'rank', 999)
-
-"clojure with async-clj-omni
-"let g:deoplete#keyword_patterns = {}
-"let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
-
-" deoplete complete on TAB
-function! s:check_back_space() abort "{{{
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction"}}}
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-y>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ deoplete#manual_complete()
-
 " automatically select the first item in the autocomplete menu
 set completeopt+=noinsert
+
+" auto fold settings
+"initial fold level
+set foldlevelstart=500
+"big files need more memory to keep folds
+set maxmempattern=30000
+
+augroup Folding
+  autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab foldmethod=indent
+  autocmd FileType json,javascript,javascript.jsx setlocal foldmethod=syntax
+augroup END
 
 " clojure
 "activate rainbow parentheses
@@ -186,25 +252,132 @@ augroup rainbow_lisp
   autocmd FileType lisp,clojure,scheme RainbowParentheses
 augroup END
 
-"if has("nvim")
-  " Open terminal and run lein figwheel
-  nmap <Leader>fig :below new<cr>:terminal<CR>lein figwheel<CR><C-\><C-n><C-w>p
-  " Evaluate anything from the visual mode in the next window
-  vmap ,e y<C-w>wpi<CR><C-\><C-n><C-w>p
-  " Evaluate outer most form
-  nmap ,e ^v%,e
-  " Evaluate buffer"
-  nmap ,b ggVG,e
-"endif
+" Evaluate anything from the visual mode in the next window
+vmap ,e y<C-w>wpi<CR><C-\><C-n><C-w>p
+" Evaluate outer most form
+nmap ,e ^v%,e
+" Evaluate buffer"
+nmap ,b ggVG,e
 
 
 " Trim whitespace on save
 fun! TrimWhitespace()
-    let l:save = winsaveview()
-    %s/\s\+$//e
-    call winrestview(l:save)
+  let l:save = winsaveview()
+  %s/\s\+$//e
+  call winrestview(l:save)
 endfun
 autocmd FileType vim,c,cpp,java,php,ruby,python,clojure,javascript autocmd BufWritePre <buffer> :call TrimWhitespace()
 
 " Support flow syntax by vim-javascript (used by polyglot)
 let g:javascript_plugin_flow = 1
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [d <Plug>(coc-diagnostic-prev)
+nmap <silent> ]d <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap grn <Plug>(coc-rename)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+" Remap for format selected region
+" TODO: Does not work
+"xmap <leader>f  <Plug>(coc-format-selected)
+"nmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f :Format<cr>
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+"xmap <leader>a  <Plug>(coc-codeaction-selected)
+"nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+"nmap <leader>x  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Add diagnostic info for https://github.com/itchyny/lightline.vim
+      " 'colorscheme': 'wombat',
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
+
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+"nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space><f12>  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
