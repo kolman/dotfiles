@@ -47,6 +47,7 @@ au FocusLost * silent! wa
 " Automatically save and restore view (folds, cursor position etc)
 "if options are included in view, it will save/restore current directory
 set viewoptions-=options
+set viewoptions-=curdir
 au BufWinLeave ?* silent! mkview
 au BufWinEnter ?* silent! loadview
 
@@ -95,6 +96,15 @@ let g:closetag_regions = {
 " Shortcut for closing tags, default is '>'
 let g:closetag_shortcut = '>'
 
+let g:coc_global_extensions = [
+\ 'coc-prettier',
+\ 'coc-eslint',
+\ 'coc-json',
+\ 'coc-html',
+\ 'coc-css',
+\ 'coc-yaml'
+\ ]
+
 " install plug-vim plugins
 call plug#begin("~/.local/share/nvim/plugged")
 
@@ -114,7 +124,7 @@ Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'ayu-theme/ayu-vim'
 Plug 'rakr/vim-one'
 
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Git
 Plug 'airblade/vim-gitgutter'
@@ -201,6 +211,7 @@ autocmd BufWritePost * GitGutter
 nnoremap <leader>O :Files<cr>
 nnoremap <leader>o :GFiles<cr>
 nnoremap <leader>e :History<cr>
+nnoremap <leader>B :call fzf#vim#gitfiles('.', {'options':'--query '.expand('<cword>')})<cr>
 " search lines in the current buffer
 nnoremap <leader>l :BLines<cr>
 
