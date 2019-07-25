@@ -43,6 +43,7 @@ set smartcase
 set autowriteall
 "Automatically save files when vim loses focus (except for new files)
 au FocusLost * silent! wa
+au BufLeave * silent! update
 
 " Automatically save and restore view (folds, cursor position etc)
 "if options are included in view, it will save/restore current directory
