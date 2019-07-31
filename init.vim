@@ -60,6 +60,17 @@ vnoremap <leader>y "+y
 nnoremap <leader>p "+p
 vnoremap <leader>p "+p
 
+" Automatically close parentheses
+augroup close_parentheses
+  autocmd!
+  autocmd FileType javascript inoremap { {}<esc>i
+  autocmd FileType javascript inoremap [ []<esc>i
+  autocmd FileType javascript inoremap ( ()<esc>i
+  autocmd FileType javascript inoremap " ""<esc>i
+  autocmd FileType javascript inoremap ' ''<esc>i
+augroup END
+
+
 " whitespace
 set list " display whitespace
 
@@ -70,7 +81,7 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 " autoclose HTML tags
 " filenames like *.xml, *.html, *.xhtml, ...
 " These are the file extensions where this plugin is enabled.
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.jsx,*.js'
 
 " filenames like *.xml, *.xhtml, ...
 " This will make the list of non-closing tags self-closing in the specified files.
@@ -90,9 +101,10 @@ let g:closetag_emptyTags_caseSensitive = 1
 
 " dict
 " Disables auto-close if not in a "valid" region (based on filetype)
-let g:closetag_regions = {
-    \ 'typescript.tsx': 'jsxRegion,tsxRegion'
-    \ }
+"let g:closetag_regions = {
+      "\ 'typescript.tsx': 'jsxRegion,tsxRegion'
+      "\
+    "\ }
 
 " Shortcut for closing tags, default is '>'
 let g:closetag_shortcut = '>'
@@ -215,6 +227,9 @@ nnoremap <leader>e :History<cr>
 nnoremap <leader>B :call fzf#vim#gitfiles('.', {'options':'--query '.expand('<cword>')})<cr>
 " search lines in the current buffer
 nnoremap <leader>l :BLines<cr>
+
+" close any fzf window on Esc instead of switching to normal mode
+autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
 
 " in visual mode, remap *
 vnoremap * "9y/<c-r>9<cr>
