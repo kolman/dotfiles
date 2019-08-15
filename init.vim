@@ -11,6 +11,9 @@ set expandtab
 set shiftwidth=2
 set softtabstop=2
 
+" Enable 256 colors
+set t_Co=256
+
 " Enable line numbers
 set number
 
@@ -38,6 +41,10 @@ nnoremap <leader><Space> :nohl<CR>
 set ignorecase
 " ...unless there's a capital letter in the query
 set smartcase
+
+" Start syntax highlighting x lines before the top line
+" Default is 10 which is way too low
+autocmd BufEnter * :syntax sync minlines=600
 
 "Automatically save files when switching buffers in vim
 set autowriteall
@@ -101,10 +108,10 @@ let g:closetag_emptyTags_caseSensitive = 1
 
 " dict
 " Disables auto-close if not in a "valid" region (based on filetype)
-"let g:closetag_regions = {
-      "\ 'typescript.tsx': 'jsxRegion,tsxRegion'
-      "\
-    "\ }
+let g:closetag_regions = {
+      \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+      \ 'javascript': 'jsxRegion'
+    \ }
 
 " Shortcut for closing tags, default is '>'
 let g:closetag_shortcut = '>'
@@ -133,9 +140,11 @@ Plug 'scrooloose/nerdtree' " file tree
 " color scheme
 Plug 'iCyMind/NeoSolarized'
 Plug 'morhetz/gruvbox'
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
+"Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'ayu-theme/ayu-vim'
-Plug 'rakr/vim-one'
+"Plug 'rakr/vim-one'
+Plug 'pgdouyon/vim-yin-yang'
+Plug 'smallwat3r/vim-mono-sw'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -144,8 +153,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 Plug 'tpope/vim-repeat'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-surround' " add and remove brackets
 Plug 'scrooloose/nerdcommenter'
 
