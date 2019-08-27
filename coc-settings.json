@@ -1,4 +1,7 @@
 {
+  "diagnostic.messageTarget": "float",
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextPrefix": "😂 ⚑ ",
   "languageserver": {
     "flow": {
       "command": "${workspaceFolder}/node_modules/.bin/flow",
@@ -9,6 +12,11 @@
       "settings": {},
       "rootPatterns": [".flowconfig"]
     }
-  }
+  },
+  "eslint.filetypes": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
 }
-

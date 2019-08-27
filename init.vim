@@ -67,17 +67,6 @@ vnoremap <leader>y "+y
 nnoremap <leader>p "+p
 vnoremap <leader>p "+p
 
-" Automatically close parentheses
-augroup close_parentheses
-  autocmd!
-  autocmd FileType javascript inoremap { {}<esc>i
-  autocmd FileType javascript inoremap [ []<esc>i
-  autocmd FileType javascript inoremap ( ()<esc>i
-  autocmd FileType javascript inoremap " ""<esc>i
-  autocmd FileType javascript inoremap ' ''<esc>i
-augroup END
-
-
 " whitespace
 set list " display whitespace
 
@@ -88,11 +77,11 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 " autoclose HTML tags
 " filenames like *.xml, *.html, *.xhtml, ...
 " These are the file extensions where this plugin is enabled.
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.jsx,*.js'
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.jsx,*.js,*.tsx'
 
 " filenames like *.xml, *.xhtml, ...
 " This will make the list of non-closing tags self-closing in the specified files.
-let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.js'
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.js,*.tsx'
 
 " filetypes like xml, html, xhtml, ...
 " These are the file types where this plugin is enabled.
@@ -100,7 +89,7 @@ let g:closetag_filetypes = 'html,xhtml,phtml'
 
 " filetypes like xml, xhtml, ...
 " This will make the list of non-closing tags self-closing in the specified files.
-let g:closetag_xhtml_filetypes = 'xhtml,jsx,javascript,javascript.jsx'
+let g:closetag_xhtml_filetypes = 'xhtml,jsx,javascript,javascript.jsx,typescript,typescript.tsx'
 
 " integer value [0|1]
 " This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
@@ -118,6 +107,7 @@ let g:closetag_shortcut = '>'
 
 let g:coc_global_extensions = [
 \ 'coc-prettier',
+\ 'coc-tsserver',
 \ 'coc-eslint',
 \ 'coc-json',
 \ 'coc-html',
@@ -125,12 +115,15 @@ let g:coc_global_extensions = [
 \ 'coc-yaml'
 \ ]
 
+
 " install plug-vim plugins
 call plug#begin("~/.local/share/nvim/plugged")
 
 " general
 Plug 'wincent/terminus' " support for mouse and cursor in terminal
-Plug 'sheerun/vim-polyglot' " support for many languages
+"Plug 'sheerun/vim-polyglot' " support for many languages
+Plug 'HerringtonDarkholme/yats.vim' " yet another typescript syntax
+"Plug 'leafgarland/typescript-vim'
 Plug 'tpope/vim-vinegar' " better netrw
 Plug 'tpope/vim-unimpaired' " [ and ] mappings
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy search
@@ -173,6 +166,8 @@ Plug 'clojure-vim/async-clj-omni'
 Plug 'venantius/vim-cljfmt'
 
 call plug#end()
+
+let g:polyglot_disabled = ['typescript', 'typescript.tsx', 'typescriptreact']
 
 " fonts and colors
 "use true colors in terminal
@@ -279,7 +274,7 @@ set maxmempattern=30000
 
 augroup Folding
   autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab foldmethod=indent
-  autocmd FileType json,javascript,javascript.jsx setlocal foldmethod=syntax
+  autocmd FileType json,javascript,javascript.jsx,typescript,typescript.tsx setlocal foldmethod=syntax
 augroup END
 
 " clojure
@@ -303,7 +298,7 @@ fun! TrimWhitespace()
   %s/\s\+$//e
   call winrestview(l:save)
 endfun
-autocmd FileType vim,c,cpp,java,php,ruby,python,clojure,javascript autocmd BufWritePre <buffer> :call TrimWhitespace()
+autocmd FileType vim,c,cpp,java,php,ruby,python,clojure,javascript,typescript autocmd BufWritePre <buffer> :call TrimWhitespace()
 
 " Support flow syntax by vim-javascript (used by polyglot)
 let g:javascript_plugin_flow = 1
@@ -417,4 +412,17 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+" Automatically close parentheses
+" this is ath the end because it breaks syntax highlighting due to "open"
+" parens
+augroup close_parentheses
+  autocmd!
+  autocmd FileType javascript,typescript,typescript.tsx inoremap { {}<esc>i
+  autocmd FileType javascript,typescript,typescript.tsx inoremap [ []<esc>i
+  autocmd FileType javascript,typescript,typescript.tsx inoremap ( ()<esc>i
+  autocmd FileType javascript,typescript,typescript.tsx inoremap " ""<esc>i
+  "autocmd FileType javascript,typescript,typescript.tsx inoremap ' ''<esc>i
+augroup END
+
 
