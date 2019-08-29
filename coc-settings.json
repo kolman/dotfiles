@@ -1,5 +1,6 @@
 {
-  "diagnostic.messageTarget": "float",
+  // my neovim does not support floating windows
+  "suggest.floatEnable": false,
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextPrefix": "😂 ⚑ ",
   "languageserver": {

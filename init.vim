@@ -26,6 +26,9 @@ set signcolumn=yes
 " hide buffers instead of closing
 set hidden
 
+" disables --INSERT-- in status line, so that Coc can display signatures
+set noshowmode
+
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
 
@@ -107,7 +110,9 @@ let g:closetag_shortcut = '>'
 
 let g:coc_global_extensions = [
 \ 'coc-prettier',
+\ 'coc-highlight',
 \ 'coc-tsserver',
+\ 'coc-pairs',
 \ 'coc-eslint',
 \ 'coc-json',
 \ 'coc-html',
@@ -123,23 +128,18 @@ call plug#begin("~/.local/share/nvim/plugged")
 Plug 'wincent/terminus' " support for mouse and cursor in terminal
 "Plug 'sheerun/vim-polyglot' " support for many languages
 Plug 'HerringtonDarkholme/yats.vim' " yet another typescript syntax
-"Plug 'leafgarland/typescript-vim'
 Plug 'tpope/vim-vinegar' " better netrw
 Plug 'tpope/vim-unimpaired' " [ and ] mappings
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy search
 Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree' " file tree
+"Plug 'scrooloose/nerdtree' " file tree
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " color scheme
-Plug 'iCyMind/NeoSolarized'
 Plug 'morhetz/gruvbox'
-"Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'ayu-theme/ayu-vim'
-"Plug 'rakr/vim-one'
 Plug 'pgdouyon/vim-yin-yang'
-Plug 'smallwat3r/vim-mono-sw'
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'cocopon/iceberg.vim'
 
 " Git
 Plug 'airblade/vim-gitgutter'
@@ -152,9 +152,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-surround' " add and remove brackets
 Plug 'scrooloose/nerdcommenter'
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-Plug 'alvan/vim-closetag'
+Plug 'alvan/vim-closetag' " automatically close html/xml tags
 
 """"""" Clojure
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
@@ -167,6 +165,7 @@ Plug 'venantius/vim-cljfmt'
 
 call plug#end()
 
+" does not work?
 let g:polyglot_disabled = ['typescript', 'typescript.tsx', 'typescriptreact']
 
 " fonts and colors
@@ -179,9 +178,15 @@ else
   let g:gruvbox_italic=0
 endif
 
-let ayucolor="dark"
+augroup ColorsMod
+  autocmd!
+  autocmd ColorScheme * highlight CocHighlightText gui=underline
+augroup END
+
+"let ayucolor="dark"
 set background=dark
-colorscheme ayu
+"colorscheme ayu
+colorscheme iceberg
 
 " terminal
 
@@ -346,6 +351,8 @@ endfunction
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
+" Show signature of a function under cursor in insert mode
+autocmd CursorHoldI * call CocActionAsync('showSignatureHelp')
 
 " Remap for rename current word
 nmap grn <Plug>(coc-rename)
@@ -412,17 +419,5 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-
-" Automatically close parentheses
-" this is ath the end because it breaks syntax highlighting due to "open"
-" parens
-augroup close_parentheses
-  autocmd!
-  autocmd FileType javascript,typescript,typescript.tsx inoremap { {}<esc>i
-  autocmd FileType javascript,typescript,typescript.tsx inoremap [ []<esc>i
-  autocmd FileType javascript,typescript,typescript.tsx inoremap ( ()<esc>i
-  autocmd FileType javascript,typescript,typescript.tsx inoremap " ""<esc>i
-  "autocmd FileType javascript,typescript,typescript.tsx inoremap ' ''<esc>i
-augroup END
 
 
