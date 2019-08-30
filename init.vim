@@ -181,6 +181,8 @@ endif
 augroup ColorsMod
   autocmd!
   autocmd ColorScheme * highlight CocHighlightText gui=underline
+  autocmd ColorScheme iceberg highlight CocHighlightText gui=none guifg=#eeee00
+  autocmd ColorScheme yin highlight CocHighlightText gui=none guifg=#cccc00
 augroup END
 
 "let ayucolor="dark"
@@ -392,7 +394,7 @@ nmap <leader>qf  <Plug>(coc-fix-current)
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'cocstatus', 'readonly', 'relativepath', 'modified' ] ]
       \ },
       \ 'component_function': {
       \   'cocstatus': 'coc#status'
