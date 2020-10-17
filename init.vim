@@ -11,6 +11,10 @@ set expandtab
 set shiftwidth=2
 set softtabstop=2
 
+" do not add empty line et the end of the file
+set nofixendofline
+set noendofline
+
 " Enable 256 colors
 set t_Co=256
 
@@ -47,7 +51,7 @@ set smartcase
 
 " Start syntax highlighting x lines before the top line
 " Default is 10 which is way too low
-autocmd BufEnter * :syntax sync minlines=600
+autocmd BufEnter * :syntax sync minlines=1500
 
 "Automatically save files when switching buffers in vim
 set autowriteall
@@ -77,14 +81,15 @@ set list " display whitespace
 let g:python_host_prog  = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
+
 " autoclose HTML tags
 " filenames like *.xml, *.html, *.xhtml, ...
 " These are the file extensions where this plugin is enabled.
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.jsx,*.js,*.tsx'
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.jsx,*.js,*.tsx,*.mdx'
 
 " filenames like *.xml, *.xhtml, ...
 " This will make the list of non-closing tags self-closing in the specified files.
-let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.js,*.tsx'
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.js,*.tsx,*.mdx'
 
 " filetypes like xml, html, xhtml, ...
 " These are the file types where this plugin is enabled.
@@ -92,7 +97,7 @@ let g:closetag_filetypes = 'html,xhtml,phtml'
 
 " filetypes like xml, xhtml, ...
 " This will make the list of non-closing tags self-closing in the specified files.
-let g:closetag_xhtml_filetypes = 'xhtml,jsx,javascript,javascript.jsx,typescript,typescript.tsx'
+let g:closetag_xhtml_filetypes = 'xhtml,jsx,javascript,javascript.jsx,typescript,typescript.tsx,markdown.mdx'
 
 " integer value [0|1]
 " This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
@@ -127,7 +132,13 @@ call plug#begin("~/.local/share/nvim/plugged")
 " general
 Plug 'wincent/terminus' " support for mouse and cursor in terminal
 "Plug 'sheerun/vim-polyglot' " support for many languages
-Plug 'HerringtonDarkholme/yats.vim' " yet another typescript syntax
+"
+Plug 'leafgarland/typescript-vim'
+Plug 'ianks/vim-tsx'
+Plug 'jxnblk/vim-mdx-js'
+
+"Plug 'HerringtonDarkholme/yats.vim' " yet another typescript syntax
+
 Plug 'tpope/vim-vinegar' " better netrw
 Plug 'tpope/vim-unimpaired' " [ and ] mappings
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy search
@@ -135,15 +146,19 @@ Plug 'junegunn/fzf.vim'
 "Plug 'scrooloose/nerdtree' " file tree
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+Plug 'udalov/kotlin-vim'
+
 " color scheme
 Plug 'morhetz/gruvbox'
 Plug 'ayu-theme/ayu-vim'
 Plug 'pgdouyon/vim-yin-yang'
 Plug 'cocopon/iceberg.vim'
+Plug 'rakr/vim-one'
 
 " Git
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'christoomey/vim-conflicted'
 
 Plug 'tpope/vim-repeat'
 Plug 'itchyny/lightline.vim'
@@ -168,6 +183,9 @@ call plug#end()
 " does not work?
 let g:polyglot_disabled = ['typescript', 'typescript.tsx', 'typescriptreact']
 
+" Override mdx filetype to enable prettier
+autocmd BufNewFile,BufRead *.mdx set filetype=mdx
+
 " fonts and colors
 "use true colors in terminal
 set termguicolors
@@ -189,6 +207,13 @@ augroup END
 set background=dark
 "colorscheme ayu
 colorscheme iceberg
+
+" window
+
+nnoremap <leader><right> <C-W><right>
+nnoremap <leader><left> <C-W><left>
+nnoremap <leader><up> <C-W><up>
+nnoremap <leader><down> <C-W><down>
 
 " terminal
 
@@ -237,6 +262,7 @@ nnoremap <leader>O :Files<cr>
 nnoremap <leader>o :GFiles<cr>
 nnoremap <leader>e :History<cr>
 nnoremap <leader>B :call fzf#vim#gitfiles('.', {'options':'--query '.expand('<cword>')})<cr>
+vnoremap <leader>B "9y:call fzf#vim#gitfiles('.', {'options':'--query '.expand('<c-r>9')})<cr>
 " search lines in the current buffer
 nnoremap <leader>l :BLines<cr>
 
@@ -328,7 +354,7 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use `[c` and `]c` to navigate diagnostics
 nmap <silent> [d <Plug>(coc-diagnostic-prev)
@@ -357,7 +383,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 autocmd CursorHoldI * call CocActionAsync('showSignatureHelp')
 
 " Remap for rename current word
-nmap grn <Plug>(coc-rename)
+nmap <leader>n <Plug>(coc-rename)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -387,7 +413,7 @@ augroup end
 " Remap for do codeAction of current line
 "nmap <leader>x  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>d <Plug>(coc-fix-current)
 
 " Add diagnostic info for https://github.com/itchyny/lightline.vim
       " 'colorscheme': 'wombat',
@@ -406,20 +432,23 @@ let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_
 
 " Using CocList
 " Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <leader>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-"nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+"nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
 " Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
 " Find symbol of current document
-nnoremap <silent> <space><f12>  :<C-u>CocList outline<cr>
+nnoremap <silent> <leader>=  :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
 
 
+" Code snippets
+nnoremap <leader>ir iimport React from 'react';<cr><esc>
+nnoremap <leader>ii ggiimport i from 'icepick';<cr><esc><C-o>

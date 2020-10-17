@@ -12,6 +12,20 @@
       "requireRootPattern": true,
       "settings": {},
       "rootPatterns": [".flowconfig"]
+    },
+    "kotlin": {
+      "command": "/Users/dkolman/dev/kotlin-language-server/server/build/install/server/bin/kotlin-language-server",
+      "filetypes": ["kotlin"]
+    },
+    "groovy": {
+      "command": "java",
+      "args": [
+        "-cp",
+        "/Users/dkolman/.gradle/caches/modules-2/files-2.1/",
+        "-jar",
+        "/Users/dkolman/dev/groovy-language-server/build/libs/groovy-language-server-all.jar"
+      ],
+      "filetypes": ["groovy"]
     }
   },
   "eslint.filetypes": [
