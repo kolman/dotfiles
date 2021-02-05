@@ -18,8 +18,8 @@ set noendofline
 " Enable 256 colors
 set t_Co=256
 
-" Enable line numbers
-set number
+" Enable hybrid line numbers
+set number relativenumber
 
 " Highlight current line
 set cursorline
@@ -64,7 +64,7 @@ au BufLeave * silent! update
 set viewoptions-=options
 set viewoptions-=curdir
 au BufWinLeave ?* silent! mkview
-au BufWinEnter ?* silent! loadview
+au BufWinEnter ?* silent! loadview | call lightline#update() " lightline needs to update colors
 
 " Clipboard
 "Copy to clipboard
@@ -145,6 +145,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " fuzzy search
 Plug 'junegunn/fzf.vim'
 "Plug 'scrooloose/nerdtree' " file tree
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'antoinemadec/coc-fzf'
 
 Plug 'udalov/kotlin-vim'
 
@@ -160,11 +161,15 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'christoomey/vim-conflicted'
 
+" Show marks in the gutter
+"Plug 'kshenoy/vim-signature'
+
 Plug 'tpope/vim-repeat'
 Plug 'itchyny/lightline.vim'
 "Plug 'vim-airline/vim-airline'
 "Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-surround' " add and remove brackets
+Plug 'tpope/vim-abolish' " Subvert, coerce case
 Plug 'scrooloose/nerdcommenter'
 
 Plug 'alvan/vim-closetag' " automatically close html/xml tags
@@ -422,6 +427,10 @@ let g:lightline = {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'cocstatus', 'readonly', 'relativepath', 'modified' ] ]
       \ },
+      \ 'inactive': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'relativepath', 'modified' ] ]
+      \ },
       \ 'component_function': {
       \   'cocstatus': 'coc#status'
       \ },
@@ -448,6 +457,11 @@ nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
 
+" Scrolling in the floating windows
+nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 
 " Code snippets
 nnoremap <leader>ir iimport React from 'react';<cr><esc>
