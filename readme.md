@@ -1,7 +1,5 @@
 # My dotfiles for OS X
 
-Sync dotfiles: `./sync.sh -f`
-
 Install libs and apps: `./brew.sh`
 
 To install on fresh machine, run:
